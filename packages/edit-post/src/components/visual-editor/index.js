@@ -24,30 +24,44 @@ import { useState, useEffect, createPortal } from '@wordpress/element';
 import BlockInspectorButton from './block-inspector-button';
 import { useResizeCanvas } from '../resize-canvas';
 
-export const IFrame = ( { children, ...props } ) => {
+export const IFrame = ( { children, head, styles, ...props } ) => {
 	const [ contentRef, setContentRef ] = useState();
 	const doc = contentRef && contentRef.contentWindow.document;
 
 	useEffect( () => {
 		if ( doc ) {
 			doc.body.style.margin = '0px';
-			doc.head.appendChild(
-				document.getElementById( 'wp-block-editor-css' ).cloneNode()
-			);
-			doc.head.appendChild(
-				document.getElementById( 'wp-block-library-css' ).cloneNode()
-			);
-			doc.head.appendChild(
-				document.getElementById( 'wp-edit-blocks-css' ).cloneNode()
-			);
-			doc.head.appendChild(
-				document
-					.getElementById( 'twentytwenty-block-editor-styles-css' )
-					.cloneNode()
-			);
-			doc.head.appendChild(
-				document.getElementById( 'wp-components-css' ).cloneNode()
-			);
+			doc.head.innerHTML = head;
+
+			styles.forEach( ( { css } ) => {
+				const styleEl = doc.createElement( 'style' );
+				styleEl.innerHTML = css;
+				doc.head.appendChild( styleEl );
+			} );
+
+			[ ...document.styleSheets ].reduce( ( acc, styleSheet ) => {
+				try {
+					const isMatch = [ ...styleSheet.cssRules ].find(
+						( { selectorText } ) => {
+							return (
+								selectorText.indexOf(
+									'.editor-styles-wrapper'
+								) !== -1
+							);
+						}
+					);
+
+					if ( isMatch ) {
+						const node = styleSheet.ownerNode;
+
+						if ( ! doc.getElementById( node.id ) ) {
+							doc.head.appendChild( node );
+						}
+					}
+				} catch ( e ) {}
+
+				return acc;
+			}, [] );
 		}
 	}, [ doc ] );
 
@@ -59,13 +73,18 @@ export const IFrame = ( { children, ...props } ) => {
 	);
 };
 
-function VisualEditor() {
+function VisualEditor( { settings } ) {
 	const inlineStyles = useResizeCanvas();
 
 	return (
 		<>
 			<Popover.Slot name="block-toolbar" />
-			<IFrame className="edit-post-visual-editor" style={ inlineStyles }>
+			<IFrame
+				className="edit-post-visual-editor"
+				style={ inlineStyles }
+				head={ settings.editor_style_html }
+				styles={ settings.styles }
+			>
 				<BlockSelectionClearer className="editor-styles-wrapper">
 					<VisualEditorGlobalKeyboardShortcuts />
 					<MultiSelectScrollIntoView />
