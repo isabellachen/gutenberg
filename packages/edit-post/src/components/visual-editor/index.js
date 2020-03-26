@@ -23,6 +23,7 @@ import { useState, useEffect, createPortal } from '@wordpress/element';
  */
 import BlockInspectorButton from './block-inspector-button';
 import { useResizeCanvas } from '../resize-canvas';
+import { __ } from '@wordpress/i18n';
 
 export const IFrame = ( { children, head, styles, ...props } ) => {
 	const [ contentRef, setContentRef ] = useState();
@@ -66,8 +67,12 @@ export const IFrame = ( { children, head, styles, ...props } ) => {
 	}, [ doc ] );
 
 	return (
-		// eslint-disable-next-line jsx-a11y/iframe-has-title
-		<iframe { ...props } ref={ setContentRef }>
+		<iframe
+			{ ...props }
+			ref={ setContentRef }
+			title={ __( 'Editor content' ) }
+			name="editor-content"
+		>
 			{ doc && createPortal( children, doc.body ) }
 		</iframe>
 	);
