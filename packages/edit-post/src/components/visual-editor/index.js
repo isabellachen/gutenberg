@@ -88,6 +88,7 @@ function VisualEditor( { settings } ) {
 
 	return (
 		<>
+			<VisualEditorGlobalKeyboardShortcuts />
 			<Popover.Slot name="block-toolbar" />
 			<IFrame
 				className="edit-post-visual-editor"
