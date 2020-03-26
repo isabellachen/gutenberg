@@ -3,11 +3,15 @@
  * if exists. As much as possible, this helper should be avoided, and used only
  * in cases where isolated behaviors need remote access to a block node.
  *
- * @param {string} clientId Block client ID.
+ * @param {string}   clientId Block client ID.
+ * @param {Document} scope
  *
  * @return {Element} Block DOM node.
  */
-export function getBlockDOMNode( clientId, scope = document ) {
+export function getBlockDOMNode(
+	clientId,
+	scope = window.frames[ 'editor-content' ].document
+) {
 	return scope.getElementById( 'block-' + clientId );
 }
 
