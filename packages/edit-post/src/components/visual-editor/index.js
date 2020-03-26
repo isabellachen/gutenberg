@@ -31,6 +31,7 @@ export const IFrame = ( { children, head, styles, ...props } ) => {
 
 	useEffect( () => {
 		if ( doc ) {
+			doc.body.className = 'editor-styles-wrapper';
 			doc.body.style.margin = '0px';
 			doc.head.innerHTML = head;
 
@@ -90,7 +91,7 @@ function VisualEditor( { settings } ) {
 				head={ settings.editor_style_html }
 				styles={ settings.styles }
 			>
-				<BlockSelectionClearer className="editor-styles-wrapper">
+				<BlockSelectionClearer>
 					<VisualEditorGlobalKeyboardShortcuts />
 					<MultiSelectScrollIntoView />
 					<Typewriter>
