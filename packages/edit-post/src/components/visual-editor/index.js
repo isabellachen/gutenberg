@@ -15,7 +15,7 @@ import {
 	MultiSelectScrollIntoView,
 	__experimentalBlockSettingsMenuFirstItem,
 } from '@wordpress/block-editor';
-import { Popover } from '@wordpress/components';
+import { Popover, DropZoneProvider } from '@wordpress/components';
 import { useState, useEffect, createPortal } from '@wordpress/element';
 
 /**
@@ -92,27 +92,29 @@ function VisualEditor( { settings } ) {
 				styles={ settings.styles }
 			>
 				<BlockSelectionClearer>
-					<VisualEditorGlobalKeyboardShortcuts />
-					<MultiSelectScrollIntoView />
-					<Typewriter>
-						<CopyHandler>
-							<WritingFlow>
-								<ObserveTyping>
-									<CopyHandler>
-										<div className="edit-post-visual-editor__post-title-wrapper">
-											<PostTitle />
-										</div>
-										<BlockList />
-									</CopyHandler>
-								</ObserveTyping>
-							</WritingFlow>
-						</CopyHandler>
-					</Typewriter>
-					<__experimentalBlockSettingsMenuFirstItem>
-						{ ( { onClose } ) => (
-							<BlockInspectorButton onClick={ onClose } />
-						) }
-					</__experimentalBlockSettingsMenuFirstItem>
+					<DropZoneProvider>
+						<VisualEditorGlobalKeyboardShortcuts />
+						<MultiSelectScrollIntoView />
+						<Typewriter>
+							<CopyHandler>
+								<WritingFlow>
+									<ObserveTyping>
+										<CopyHandler>
+											<div className="edit-post-visual-editor__post-title-wrapper">
+												<PostTitle />
+											</div>
+											<BlockList />
+										</CopyHandler>
+									</ObserveTyping>
+								</WritingFlow>
+							</CopyHandler>
+						</Typewriter>
+						<__experimentalBlockSettingsMenuFirstItem>
+							{ ( { onClose } ) => (
+								<BlockInspectorButton onClick={ onClose } />
+							) }
+						</__experimentalBlockSettingsMenuFirstItem>
+					</DropZoneProvider>
 				</BlockSelectionClearer>
 			</IFrame>
 		</>
