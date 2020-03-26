@@ -27,7 +27,7 @@ async function emulateSelectAll() {
 
 		function getActiveElement( { activeElement } ) {
 			if ( activeElement.nodeName === 'IFRAME' ) {
-				return getActiveElement( activeElement.contentDocument )
+				return getActiveElement( activeElement.contentDocument );
 			}
 			return activeElement;
 		}
@@ -106,7 +106,7 @@ async function emulateClipboard( type ) {
 	await page.evaluate( ( _type ) => {
 		function getActiveElement( { activeElement } ) {
 			if ( activeElement.nodeName === 'IFRAME' ) {
-				return getActiveElement( activeElement.contentDocument )
+				return getActiveElement( activeElement.contentDocument );
 			}
 			return activeElement;
 		}

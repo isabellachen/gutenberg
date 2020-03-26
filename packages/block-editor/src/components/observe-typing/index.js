@@ -70,6 +70,7 @@ function ObserveTyping( { children, setTimeout: setSafeTimeout } ) {
 			'mousemove',
 			stopTypingOnMouseMove
 		);
+		document[ bindFn ]( 'mousemove', stopTypingOnMouseMove );
 	}
 
 	/**

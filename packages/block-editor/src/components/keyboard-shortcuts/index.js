@@ -96,7 +96,7 @@ function KeyboardShortcuts() {
 			},
 			[ clientIds, removeBlocks ]
 		),
-		{ isDisabled: clientIds.length < 1 }
+		{ isDisabled: clientIds.length < 2 }
 	);
 
 	useShortcut(
