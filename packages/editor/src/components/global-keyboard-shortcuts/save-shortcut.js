@@ -3,7 +3,6 @@
  */
 import { useShortcut } from '@wordpress/keyboard-shortcuts';
 import { useDispatch, useSelect } from '@wordpress/data';
-import { useRef } from '@wordpress/element';
 
 function SaveShortcut() {
 	const { savePost } = useDispatch( 'core/editor' );
@@ -11,7 +10,6 @@ function SaveShortcut() {
 		( select ) => select( 'core/editor' ).isEditedPostDirty,
 		[]
 	);
-	const ref = useRef();
 
 	useShortcut(
 		'core/editor/save',
@@ -29,10 +27,10 @@ function SaveShortcut() {
 
 			savePost();
 		},
-		{ bindGlobal: true, target: () => ref.current.ownerDocument }
+		{ bindGlobal: true }
 	);
 
-	return <div ref={ ref } />;
+	return null;
 }
 
 export default SaveShortcut;

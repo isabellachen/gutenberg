@@ -17,6 +17,7 @@ import {
 } from '@wordpress/block-editor';
 import { Popover, DropZoneProvider } from '@wordpress/components';
 import { useState, useEffect, createPortal } from '@wordpress/element';
+import { useKeyboardShortcut } from '@wordpress/compose';
 
 /**
  * Internal dependencies
@@ -27,6 +28,7 @@ import { __ } from '@wordpress/i18n';
 
 export const IFrame = ( { children, head, styles, ...props } ) => {
 	const [ contentRef, setContentRef ] = useState();
+	const win = contentRef && contentRef.contentWindow;
 	const doc = contentRef && contentRef.contentWindow.document;
 
 	useEffect( () => {
@@ -74,7 +76,9 @@ export const IFrame = ( { children, head, styles, ...props } ) => {
 			title={ __( 'Editor content' ) }
 			name="editor-content"
 		>
-			{ doc && createPortal( children, doc.body ) }
+			<useKeyboardShortcut.WindowContext.Provider value={ win || window }>
+				{ doc && createPortal( children, doc.body ) }
+			</useKeyboardShortcut.WindowContext.Provider>
 		</iframe>
 	);
 };

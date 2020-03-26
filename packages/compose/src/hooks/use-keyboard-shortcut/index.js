@@ -3,12 +3,12 @@
  */
 import Mousetrap from 'mousetrap';
 import 'mousetrap/plugins/global-bind/mousetrap-global-bind';
-import { includes, castArray, isFunction } from 'lodash';
+import { includes, castArray } from 'lodash';
 
 /**
  * WordPress dependencies
  */
-import { useEffect } from '@wordpress/element';
+import { useEffect, createContext, useContext } from '@wordpress/element';
 
 /**
  * A block selection object.
@@ -20,6 +20,8 @@ import { useEffect } from '@wordpress/element';
  * @property {boolean} [isDisabled]  Disables the keyboard handler if the value is true.
  * @property {Object}  [target]      React reference to the DOM element used to catch the keyboard event.
  */
+
+const WindowContext = createContext( window );
 
 /**
  * Return true if platform is MacOS.
@@ -54,19 +56,16 @@ function useKeyboardShortcut(
 		target,
 	} = {}
 ) {
+	const window = useContext( WindowContext );
 	useEffect( () => {
 		if ( isDisabled ) {
 			return;
 		}
 
-		let node = document;
+		let node = window.document;
 
-		if ( target ) {
-			if ( isFunction( target ) ) {
-				node = target();
-			} else {
-				node = target.current;
-			}
+		if ( target && target.current ) {
+			node = target.current;
 		}
 
 		const mousetrap = new Mousetrap( node );
@@ -101,5 +100,7 @@ function useKeyboardShortcut(
 		};
 	}, [ shortcuts, bindGlobal, eventName, callback, target, isDisabled ] );
 }
+
+useKeyboardShortcut.WindowContext = WindowContext;
 
 export default useKeyboardShortcut;
