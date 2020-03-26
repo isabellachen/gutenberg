@@ -103,7 +103,11 @@ function KeyboardShortcuts() {
 		'core/block-editor/select-all',
 		useCallback(
 			( event ) => {
-				if ( documentHasSelection( event.view ) ) {
+				if (
+					documentHasSelection(
+						event.target.ownerDocument.defaultView
+					)
+				) {
 					return;
 				}
 
@@ -123,7 +127,9 @@ function KeyboardShortcuts() {
 			( event ) => {
 				event.preventDefault();
 				clearSelectedBlock();
-				event.view.getSelection().removeAllRanges();
+				event.target.ownerDocument.defaultView
+					.getSelection()
+					.removeAllRanges();
 			},
 			[ clientIds, clearSelectedBlock ]
 		),
