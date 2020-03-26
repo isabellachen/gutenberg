@@ -158,7 +158,8 @@ class Draggable extends Component {
 	 * while dragging.
 	 */
 	resetDragState() {
-		const { document } = window.frames[ 0 ];
+		const { window } = this.props;
+		const { document } = window;
 		// Remove drag clone
 		document.removeEventListener( 'dragover', this.onDragOver );
 		if ( this.cloneWrapper && this.cloneWrapper.parentNode ) {
