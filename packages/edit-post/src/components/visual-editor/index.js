@@ -18,13 +18,14 @@ import {
 import { Popover, DropZoneProvider } from '@wordpress/components';
 import { useState, useEffect, createPortal } from '@wordpress/element';
 import { useKeyboardShortcut } from '@wordpress/compose';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 import BlockInspectorButton from './block-inspector-button';
 import { useResizeCanvas } from '../resize-canvas';
-import { __ } from '@wordpress/i18n';
+import EditPostKeyboardShortcuts from '../keyboard-shortcuts';
 
 export const IFrame = ( { children, head, styles, ...props } ) => {
 	const [ contentRef, setContentRef ] = useState();
@@ -100,6 +101,7 @@ function VisualEditor( { settings } ) {
 				<BlockSelectionClearer>
 					<DropZoneProvider>
 						<VisualEditorGlobalKeyboardShortcuts />
+						<EditPostKeyboardShortcuts />
 						<MultiSelectScrollIntoView />
 						<Typewriter>
 							<CopyHandler>
