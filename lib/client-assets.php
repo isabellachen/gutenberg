@@ -564,11 +564,13 @@ function gutenberg_extend_block_editor_styles( $settings ) {
 
 	ob_start();
 
-	wp_print_styles( array(
-		'wp-block-editor',
-		'wp-block-library',
-		'wp-edit-blocks',
-	) );
+	wp_print_styles(
+		array(
+			'wp-block-editor',
+			'wp-block-library',
+			'wp-edit-blocks',
+		)
+	);
 	wp_styles()->done = array();
 
 	$settings['editor_style_html'] = ob_get_clean();

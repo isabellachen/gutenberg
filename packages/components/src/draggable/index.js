@@ -80,12 +80,12 @@ class Draggable extends Component {
 			elementId,
 			transferData,
 			onDragStart = noop,
-			window,
+			window: win = window,
 		} = this.props;
-		const { document } = window;
+		const { document } = win;
 		const element = document.getElementById( elementId );
 
-		window.focus();
+		win.focus();
 
 		if ( ! element ) {
 			event.preventDefault();
@@ -158,8 +158,8 @@ class Draggable extends Component {
 	 * while dragging.
 	 */
 	resetDragState() {
-		const { window } = this.props;
-		const { document } = window;
+		const { window: win = window } = this.props;
+		const { document } = win;
 		// Remove drag clone
 		document.removeEventListener( 'dragover', this.onDragOver );
 		if ( this.cloneWrapper && this.cloneWrapper.parentNode ) {

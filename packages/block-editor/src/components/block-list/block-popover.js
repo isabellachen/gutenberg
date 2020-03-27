@@ -103,12 +103,14 @@ function BlockPopover( {
 
 	let node = blockNodes[ clientId ];
 
-	if ( capturingClientId ) {
-		node = document.getElementById( 'block-' + capturingClientId );
-	}
-
 	if ( ! node ) {
 		return null;
+	}
+
+	const { ownerDocument } = node;
+
+	if ( capturingClientId ) {
+		node = ownerDocument.getElementById( 'block-' + capturingClientId );
 	}
 
 	// A block may specify a different target element for the toolbar.
@@ -150,7 +152,7 @@ function BlockPopover( {
 		: 'top right left';
 	const stickyEl = showEmptyBlockSideInserter
 		? undefined
-		: anchorRef.ownerDocument.defaultView.frameElement;
+		: ownerDocument.defaultView.frameElement;
 
 	return (
 		<Popover
