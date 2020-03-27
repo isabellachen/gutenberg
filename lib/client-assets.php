@@ -562,19 +562,6 @@ function gutenberg_register_vendor_script( &$scripts, $handle, $src, $deps = arr
 function gutenberg_extend_block_editor_styles( $settings ) {
 	$editor_styles_file = gutenberg_dir_path() . 'build/editor/editor-styles.css';
 
-	ob_start();
-
-	wp_print_styles(
-		array(
-			'wp-block-editor',
-			'wp-block-library',
-			'wp-edit-blocks',
-		)
-	);
-	wp_styles()->done = array();
-
-	$settings['editor_style_html'] = ob_get_clean();
-
 	/*
 	 * If, for whatever reason, the built editor styles do not exist, avoid
 	 * override and fall back to the default.
@@ -624,6 +611,31 @@ function gutenberg_extend_block_editor_styles( $settings ) {
 	return $settings;
 }
 add_filter( 'block_editor_settings', 'gutenberg_extend_block_editor_styles' );
+
+/**
+ * Extends block editor settings to include Gutenberg's editor style html.
+ *
+ * @param array $settings Default editor settings.
+ *
+ * @return array Filtered editor settings.
+ */
+function gutenberg_extend_block_editor_styles_html( $settings ) {
+	ob_start();
+
+	wp_print_styles(
+		array(
+			'wp-block-editor',
+			'wp-block-library',
+			'wp-edit-blocks',
+		)
+	);
+	wp_styles()->done = array();
+
+	$settings['editor_style_html'] = ob_get_clean();
+
+	return $settings;
+}
+add_filter( 'block_editor_settings', 'gutenberg_extend_block_editor_styles_html' );
 
 /**
  * Load a block pattern by name.
