@@ -50,7 +50,7 @@
 		"lodash": "^4.17.15",
 		"memize": "^1.0.5",
 		"moment": "^2.22.1",
-		"re-resizable": "^6.0.0",
+		"re-resizable": "git+https://git@github.com/ellatrix/re-resizable.git#a204ee38ed6d2b77e8a275f3743981ceaecf7ed5",
 		"react-dates": "^17.1.1",
 		"react-spring": "^8.0.20",
 		"reakit": "^1.0.0-beta.12",
