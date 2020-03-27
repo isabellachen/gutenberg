@@ -36,6 +36,7 @@ export const IFrame = ( { children, head, styles, ...props } ) => {
 			doc.body.className = 'editor-styles-wrapper';
 			doc.body.style.margin = '0px';
 			doc.head.innerHTML = head;
+			doc.dir = document.dir;
 
 			styles.forEach( ( { css } ) => {
 				const styleEl = doc.createElement( 'style' );

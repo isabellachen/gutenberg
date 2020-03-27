@@ -10,7 +10,10 @@ import {
 } from '@wordpress/e2e-test-utils';
 
 async function getActiveLabel() {
-	return await page.evaluate( () => {
+	const frame = await page
+		.frames()
+		.find( ( f ) => f.name() === 'editor-content' );
+	return await frame.evaluate( () => {
 		return (
 			document.activeElement.getAttribute( 'aria-label' ) ||
 			document.activeElement.innerHTML
@@ -22,6 +25,7 @@ const navigateToContentEditorTop = async () => {
 	// Use 'Ctrl+`' to return to the top of the editor
 	await pressKeyWithModifier( 'ctrl', '`' );
 	await pressKeyWithModifier( 'ctrl', '`' );
+	await expect( await getActiveLabel() ).toBe( 'Editor content' );
 };
 
 const tabThroughParagraphBlock = async ( paragraphText ) => {
@@ -33,8 +37,11 @@ const tabThroughParagraphBlock = async ( paragraphText ) => {
 
 	await page.keyboard.press( 'Tab' );
 	await expect( await getActiveLabel() ).toBe( 'Paragraph block' );
+	const frame = await page
+		.frames()
+		.find( ( f ) => f.name() === 'editor-content' );
 	await expect(
-		await page.evaluate( () => document.activeElement.innerHTML )
+		await frame.evaluate( () => document.activeElement.innerHTML )
 	).toBe( paragraphText );
 
 	await page.keyboard.press( 'Tab' );
