@@ -10,13 +10,19 @@ import {
 } from '@wordpress/e2e-test-utils';
 
 async function getActiveLabel() {
-	const frame = await page
-		.frames()
-		.find( ( f ) => f.name() === 'editor-content' );
-	return await frame.evaluate( () => {
+	return await page.evaluate( () => {
+		function getActiveElement( { activeElement } ) {
+			if ( activeElement.nodeName === 'IFRAME' ) {
+				return getActiveElement( activeElement.contentDocument );
+			}
+			return activeElement;
+		}
+
+		const activeElement = getActiveElement( document );
+
 		return (
-			document.activeElement.getAttribute( 'aria-label' ) ||
-			document.activeElement.innerHTML
+			activeElement.getAttribute( 'aria-label' ) ||
+			activeElement.innerHTML
 		);
 	} );
 }
@@ -117,14 +123,18 @@ describe( 'Order of block keyboard navigation', () => {
 			await page.keyboard.type( paragraphBlock );
 		}
 
+		const frame = await page
+			.frames()
+			.find( ( f ) => f.name() === 'editor-content' );
+
 		// Clear the selected block and put focus in front of the block list.
-		await page.evaluate( () => {
-			document.querySelector( '.edit-post-visual-editor' ).focus();
+		await frame.evaluate( () => {
+			document.body.firstElementChild.focus();
 		} );
 
 		await page.keyboard.press( 'Tab' );
 		await expect(
-			await page.evaluate( () => {
+			await frame.evaluate( () => {
 				return document.activeElement.placeholder;
 			} )
 		).toBe( 'Add title' );
@@ -152,9 +162,15 @@ describe( 'Order of block keyboard navigation', () => {
 			await page.keyboard.type( paragraphBlock );
 		}
 
+		const frame = await page
+			.frames()
+			.find( ( f ) => f.name() === 'editor-content' );
+
 		// Clear the selected block and put focus behind the block list.
+		await frame.evaluate( () => {
+			document.body.firstElementChild.focus();
+		} );
 		await page.evaluate( () => {
-			document.querySelector( '.edit-post-visual-editor' ).focus();
 			document
 				.querySelector( '.block-editor-editor-skeleton__sidebar' )
 				.focus();
@@ -172,10 +188,13 @@ describe( 'Order of block keyboard navigation', () => {
 
 		await pressKeyWithModifier( 'shift', 'Tab' );
 		await expect(
-			await page.evaluate( () => {
+			await frame.evaluate( () => {
 				return document.activeElement.placeholder;
 			} )
 		).toBe( 'Add title' );
+
+		await pressKeyWithModifier( 'shift', 'Tab' );
+		await expect( await getActiveLabel() ).toBe( 'More tools & options' );
 	} );
 
 	it( 'should navigate correctly with multi selection', async () => {

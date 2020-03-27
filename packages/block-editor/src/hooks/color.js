@@ -11,7 +11,7 @@ import { addFilter } from '@wordpress/hooks';
 import { hasBlockSupport } from '@wordpress/blocks';
 import { createHigherOrderComponent } from '@wordpress/compose';
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useContext } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 
 /**
@@ -25,7 +25,7 @@ import {
 import PanelColorSettings from '../components/panel-color-settings';
 import ContrastChecker from '../components/contrast-checker';
 import InspectorControls from '../components/inspector-controls';
-import { getBlockDOMNode } from '../utils/dom';
+import { BlockNodes } from '../components/block-list/root-container';
 
 export const COLOR_SUPPORT_KEY = '__experimentalColor';
 
@@ -136,9 +136,15 @@ const ColorPanel = ( { colorSettings, clientId } ) => {
 
 	const [ detectedBackgroundColor, setDetectedBackgroundColor ] = useState();
 	const [ detectedColor, setDetectedColor ] = useState();
+	const [ blockNodes ] = useContext( BlockNodes );
 
 	useEffect( () => {
-		const colorsDetectionElement = getBlockDOMNode( clientId );
+		const colorsDetectionElement = blockNodes[ clientId ];
+
+		if ( ! colorsDetectionElement ) {
+			return;
+		}
+
 		setDetectedColor( getComputedStyle( colorsDetectionElement ).color );
 
 		let backgroundColorNode = colorsDetectionElement;

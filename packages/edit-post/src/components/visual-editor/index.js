@@ -77,7 +77,7 @@ export const IFrame = ( { children, head, styles, ...props } ) => {
 			title={ __( 'Editor content' ) }
 			name="editor-content"
 		>
-			<useKeyboardShortcut.WindowContext.Provider value={ win || window }>
+			<useKeyboardShortcut.WindowContext.Provider value={ win }>
 				{ doc && createPortal( children, doc.body ) }
 			</useKeyboardShortcut.WindowContext.Provider>
 		</iframe>

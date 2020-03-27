@@ -21,7 +21,7 @@ import { useEffect, createContext, useContext } from '@wordpress/element';
  * @property {Object}  [target]      React reference to the DOM element used to catch the keyboard event.
  */
 
-const WindowContext = createContext( window );
+const WindowContext = createContext();
 
 /**
  * Return true if platform is MacOS.
@@ -54,15 +54,17 @@ function useKeyboardShortcut(
 		eventName = 'keydown',
 		isDisabled = false, // This is important for performance considerations.
 		target,
+		altWindow,
 	} = {}
 ) {
-	const window = useContext( WindowContext );
+	const win = useContext( WindowContext );
+
 	useEffect( () => {
 		if ( isDisabled ) {
 			return;
 		}
 
-		let node = window.document;
+		let node = ( altWindow || win || window ).document;
 
 		if ( target && target.current ) {
 			node = target.current;
