@@ -8,6 +8,7 @@ import {
 	Tooltip,
 	Icon,
 	DropdownMenu,
+	DropdownFlyout,
 	MenuGroup,
 	MenuItemsChoice,
 	MenuItem,
@@ -132,13 +133,15 @@ export default function TemplateSwitcher( {
 								{ __( 'New' ) }
 							</MenuItem>
 						</MenuGroup>
-						<MenuGroup label={ __( 'Template Parts' ) }>
-							<MenuItemsChoice
-								choices={ templateParts }
-								value={ isTemplatePart ? activeId : undefined }
-								onSelect={ onActiveTemplatePartIdChange }
-								onHover={ onHoverTemplatePart }
-							/>
+						<MenuGroup>
+							<DropdownFlyout label={ __( 'Template Parts' ) }>
+								<MenuItemsChoice
+									choices={ templateParts }
+									value={ isTemplatePart ? activeId : undefined }
+									onSelect={ onActiveTemplatePartIdChange }
+									onHover={ onHoverTemplatePart }
+								/>
+							</DropdownFlyout>
 						</MenuGroup>
 						{ !! hoveredTemplate?.id && (
 							<TemplatePreview item={ hoveredTemplate } />
